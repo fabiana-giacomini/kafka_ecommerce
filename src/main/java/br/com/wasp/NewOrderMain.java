@@ -14,10 +14,10 @@ public class NewOrderMain {
                     var amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
                     var order = new Order(userId, orderId, amount);
 
-                    orderDispatcher.send("ECOMMERCE_NEW_ORDER", orderId, order);
+                    orderDispatcher.send("ECOMMERCE_NEW_ORDER", userId, order);
 
                     var email = "Thanks! We are processing your order!";
-                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", orderId, email);
+                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", userId, email);
                 }
             }
         }
