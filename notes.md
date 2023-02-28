@@ -19,3 +19,10 @@ Ver informações do tópico: `bin/kafka-topics.sh --describe --bootstrap-server
 
 Ver informações dos consumer groups: `bin/kafka-consumer-groups.sh --all-groups  --bootstrap-server localhost:9092 --describe`.
 <br>
+<br>
+
+É interessante alterar o "config/server.properties" e o "config/zookeeper.properties", indicando um diretório mais adequado para guardar as configurações, pois, por padrão
+são usadas pastas dentro da tmp, que, após a reinicialização da máquina serão removidas, pendendo informações, inclusive os tópicos.
+Para isso, basta indicar um diretório onde as informações deverão persistir.
+<br>
+
