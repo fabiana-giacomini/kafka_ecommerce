@@ -26,3 +26,12 @@ são usadas pastas dentro da tmp, que, após a reinicialização da máquina ser
 Para isso, basta indicar um diretório onde as informações deverão persistir.
 <br>
 
+## Algumas infos
+Vale lembrar que, caso tenhamos várias mensagens cuja key repita, dentro de um mesmo tópico, estas mensagens serão processadas
+na ordem em que chegaram ao tópico.<br>
+Ou seja, caso um mesmo usuário realize três compras, estas serão processadas sequencialmente, conforme foram feitas, isso em
+um cenário em que a key utilizada seja, por exemplo, o e-mail do usuário.
+Caso usemos sempre valores aleatórios e que não se repitam como key, poderíamos ter o processamento dessas mensagens
+de forma aleatória. É necessário verificar o que é o melhor para o serviço.
+<br>
+
