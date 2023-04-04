@@ -68,3 +68,14 @@ Essa quantidade pode ser configurada e, segundo a documentação, estes são so 
 Assim, é interessante usar, por exemplo, o valor "all" que garante que todos os disponíveis receeram a mensagem para considerá-la
 de fato enviada.
 <br>
+
+### Max poll
+Podemos definir a quantidade de mensagens que serão lidas/processadas por vez. No caso de deixarmos apenas 1 por vez
+temos uma maior segurança de que, caso algum dos brokers caia, mensagens não se percam no rebalanceamento.
+Por exemplo, caso tenhamos 2 brokers, sendo um com 3 partições e outro com 1, caso esse de 2 partições caia e tenha
+consumido 5 mensagens por vez, ao rebalancear para o único broker restante, pode ser que haja uma perda de informação
+na hora de resetar os offsets.<br>
+Consumindo uma por vez e commitando uma por vez, há uma segurança maior de que não foram perdidas mensagens caso haja
+a necessidade de rebalancear.
+<br>
+

@@ -30,7 +30,6 @@ public class CreateUserService {
         try (var service = new KafkaService<>(CreateUserService.class.getSimpleName(),
                 "ECOMMERCE_NEW_ORDER",
                 createUserService::parse,
-                Order.class,
                 Map.of())) {
             service.run();
         }
