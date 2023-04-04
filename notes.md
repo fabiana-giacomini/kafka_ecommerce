@@ -79,3 +79,17 @@ Consumindo uma por vez e commitando uma por vez, há uma segurança maior de que
 a necessidade de rebalancear.
 <br>
 
+### In flight requests per connection
+Propriedade `retries` se tiver valor maior que zero vai permitir ao client reenviar qualquer mensagem que falhou no envio.
+Permitir retentativas (propriedade acima) sem setar a propriedade `max.in.flight.requests.per.connection` com o valor "1"
+pode ocasionar uma mudança na ordem dos registros, pois se dois batches estão enviando para a mesma partição e um deles
+falha e é retentado, e o outro tem sucesso no envio, então as mensagens enviadas pelo segundo vão aparecer primeiro na partição.<br>
+O Kafka não consegue gatantir a ordem em que as mensagens vão chegar nas partições, pois por causa das retentativas
+pode ser que uma acabe chegando antes da outra; consegue apenas garantir a ordem de consumo, que é a mesma que a ordem 
+em que chegaram na partição.
+<br>
+A propriedade `max.in.flight.requests.per.connection` é o número de requisições "unacknowledged" que o cliente envia em
+uma única conexão antes de bloquear, e o valor padrão é 5.<br>
+Portanto, setar esse valor com > 1 e falhar no envio gera o risco de as mensagens serem reordenadas por causa das retentativas
+de envio.
+<br>
