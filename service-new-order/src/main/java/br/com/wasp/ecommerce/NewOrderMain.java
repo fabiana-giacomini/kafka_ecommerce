@@ -1,5 +1,7 @@
 package br.com.wasp.ecommerce;
 
+import br.com.wasp.ecommerce.dispatcher.KafkaDispatcher;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;

@@ -1,5 +1,7 @@
 package br.com.wasp.ecommerce;
 
+import br.com.wasp.ecommerce.consumer.KafkaService;
+import br.com.wasp.ecommerce.dispatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;

@@ -1,5 +1,7 @@
-package br.com.wasp.ecommerce;
+package br.com.wasp.ecommerce.dispatcher;
 
+import br.com.wasp.ecommerce.Message;
+import br.com.wasp.ecommerce.MessageAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.kafka.common.serialization.Serializer;

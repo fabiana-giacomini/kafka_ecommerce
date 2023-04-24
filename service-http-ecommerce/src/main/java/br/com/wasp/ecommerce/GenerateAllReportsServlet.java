@@ -1,5 +1,7 @@
 package br.com.wasp.ecommerce;
 
+import br.com.wasp.ecommerce.dispatcher.KafkaDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
