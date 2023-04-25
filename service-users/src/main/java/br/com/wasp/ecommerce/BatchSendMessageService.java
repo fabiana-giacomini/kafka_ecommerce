@@ -1,6 +1,7 @@
 package br.com.wasp.ecommerce;
 
-import br.com.wasp.ecommerce.consumer.KafkaService;
+import br.com.wasp.ecommerce.consumer.ConsumerService;
+import br.com.wasp.ecommerce.consumer.ServiceRunner;
 import br.com.wasp.ecommerce.dispatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -9,10 +10,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-public class BatchSendMessageService {
+public class BatchSendMessageService implements ConsumerService<String> {
 
     private final Connection connection;
 
@@ -31,17 +30,11 @@ public class BatchSendMessageService {
         }
     }
 
-    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
-        var batchService = new BatchSendMessageService();
-        try (var service = new KafkaService<>(BatchSendMessageService.class.getSimpleName(),
-                "ECOMMERCE_SEND_MESSAGES_TO_ALL_USERS",
-                batchService::parse,
-                Map.of())) {
-            service.run();
-        }
+    public static void main(String[] args) {
+        new ServiceRunner<>(BatchSendMessageService::new).start(5);
     }
 
-    private void parse(ConsumerRecord<String, Message<String>> record) throws SQLException, ExecutionException, InterruptedException {
+    public void parse(ConsumerRecord<String, Message<String>> record) throws SQLException {
         System.out.println("------------------------------------------");
         System.out.println("Processing new batch");
         Message<String> message = record.value();
@@ -55,6 +48,16 @@ public class BatchSendMessageService {
                     user
             );
         }
+    }
+
+    @Override
+    public String getTopic() {
+        return "ECOMMERCE_SEND_MESSAGES_TO_ALL_USERS";
+    }
+
+    @Override
+    public String getConsumerGroup() {
+        return BatchSendMessageService.class.getSimpleName();
     }
 
     private List<User> getAllUsers() throws SQLException {

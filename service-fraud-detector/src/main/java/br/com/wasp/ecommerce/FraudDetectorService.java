@@ -1,6 +1,8 @@
 package br.com.wasp.ecommerce;
 
+import br.com.wasp.ecommerce.consumer.ConsumerService;
 import br.com.wasp.ecommerce.consumer.KafkaService;
+import br.com.wasp.ecommerce.consumer.ServiceRunner;
 import br.com.wasp.ecommerce.dispatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -8,20 +10,14 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class FraudDetectorService {
+public class FraudDetectorService implements ConsumerService<Order> {
     private final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        var fraudService = new FraudDetectorService();
-        try (var service = new KafkaService<>(FraudDetectorService.class.getSimpleName(),
-                "ECOMMERCE_NEW_ORDER",
-                fraudService::parse,
-                Map.of())) {
-            service.run();
-        }
+    public static void main(String[] args) {
+        new ServiceRunner<>(FraudDetectorService::new).start(5);
     }
 
-    private void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
+    public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
         System.out.println("------------------------------------------");
         System.out.println("Processing new order, checking for fraud");
         System.out.println(record.key());
@@ -57,6 +53,16 @@ public class FraudDetectorService {
                     order
             );
         }
+    }
+
+    @Override
+    public String getTopic() {
+        return "ECOMMERCE_NEW_ORDER";
+    }
+
+    @Override
+    public String getConsumerGroup() {
+        return FraudDetectorService.class.getSimpleName();
     }
 
     private static boolean isFraud(Order order) {
