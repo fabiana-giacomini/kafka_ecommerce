@@ -11,7 +11,7 @@ public class EmailNewOrderService implements ConsumerService<Order> {
 
         private final KafkaDispatcher<String> emailDispatcher = new KafkaDispatcher<>();
     public static void main(String[] args) {
-        new ServiceRunner<>(EmailNewOrderService::new).start(5);
+        new ServiceRunner<>(EmailNewOrderService::new).start(1);
     }
 
     public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
