@@ -64,7 +64,8 @@ desatualizados sem saberem.<br>
 Podemos tentar sanar esse problema setando uma quantidade de "ACKS", sendo que, só serão consideradas enviadas as mensagens
 quando uma quantidade "x" de brokers responderem que receberam.<br>
 Essa quantidade pode ser configurada e, segundo a documentação, estes são so valores:
-"The number of acknowledgments the producer requires the leader to have received before considering a request complete. This controls the  durability of records that are sent. The following settings are allowed:  <ul> <li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1. <li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost. <li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee. This is equivalent to the acks=-1 setting."
+"The number of acknowledgments the producer requires the leader to have received before considering a request complete. 
+This controls the  durability of records that are sent. The following settings are allowed:  <ul> <li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1. <li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost. <li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee. This is equivalent to the acks=-1 setting."
 Assim, é interessante usar, por exemplo, o valor "all" que garante que todos os disponíveis receeram a mensagem para considerá-la
 de fato enviada.
 <br>
@@ -92,4 +93,12 @@ A propriedade `max.in.flight.requests.per.connection` é o número de requisiç�
 uma única conexão antes de bloquear, e o valor padrão é 5.<br>
 Portanto, setar esse valor com > 1 e falhar no envio gera o risco de as mensagens serem reordenadas por causa das retentativas
 de envio.
+<br>
+
+### Offset padrão no reset
+Caso o offset guardado como "próximo" tenha se perdido, é importante configurar a propriedade `auto.offset.reset`
+do Kafka a qual indica se é para voltar a consumir do começo, das mensagens mais antigas ainda disponíveis ("earliest"),
+ou da última mensagem "pra frente", ou seja, apenas as novas que chegarem ("latest").
+<br>
+Essa configuração pode ser feita por consumer group.
 <br>
