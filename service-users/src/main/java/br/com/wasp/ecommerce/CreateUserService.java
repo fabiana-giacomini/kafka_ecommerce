@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 public class CreateUserService implements ConsumerService<Order> {
     private final LocalDatabase database;
 
-
     CreateUserService() throws SQLException {
         this.database = new LocalDatabase("users_database");
         this.database.createIfNotExists("create table Users (" +
