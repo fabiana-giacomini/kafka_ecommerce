@@ -113,3 +113,11 @@ todos os brokers, pode ser que ele reenvie a mensagem novamente para todos, e is
 <br>
 
 ### Idempotência
+O fast delegate não é o suficiente para impedir a duplicação de mensagens, por exemplo, caso o usuário clique em "comprar" 
+bem rápido e mais de uma vez, a compra será enviada mais de uma vez. Podemos verificar esse caso no FraudDetectorService,
+e queremos que uma compra seja processada e avaliada apenas uma única vez.<br>
+Isto ocorre porque não estamos usando um id natural entre todas as apis, neste caso, usaremos um uuid recebido do cliente
+na requisição para certificar que cada compra enviada trata-se de uma compra diferente.<br>
+Além disso, passamos a verificar, antes de gerar a compra, com base no uuid da order, se se trata de uma compra nova ou
+já recebida anteriormente.
+<br>
