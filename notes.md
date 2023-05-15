@@ -102,3 +102,14 @@ ou da última mensagem "pra frente", ou seja, apenas as novas que chegarem ("lat
 <br>
 Essa configuração pode ser feita por consumer group.
 <br>
+
+### Algumas configs (consumer) para impedir mensagens duplicadas
+Uma configuração que pode ser feita é setar `enable.auto.commit.config` para `false`, para que o consumer controle
+manualmente o offset. Também para evitar o comportamento de commitar a mensagem enquanto ela ainda está sendo processada.<br>
+O `isolation.level.config` também pode ser setado para `read_commited`, isso vai fazer com que o consumer apenas
+leia as mensagens que estejam adequadamente commitadas em todos os brokers, por exemplo, caso o producer envie
+para 1 broker e o consumer já saia consumindo, caso o acks seja all pro producer e ele não consiga enviar para
+todos os brokers, pode ser que ele reenvie a mensagem novamente para todos, e isso pode gerar duplicidade de mensagem.
+<br>
+
+### Idempotência
